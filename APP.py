@@ -219,12 +219,12 @@ elif page == "👤 Giocatori":
         key="players_editor",
         column_config={
             "Giocatore": st.column_config.TextColumn("Giocatore"),
-            "Category": st.column_config.SelectboxColumn(
+            "Squadra": st.column_config.SelectboxColumn(
                 "Squadra",
                 options=["XtremeTeam", "TheGang"],
                 required=False,
             ),
-            "Price": st.column_config.NumberColumn("Price", min_value=0),
+            "Prezzo": st.column_config.NumberColumn("Price", min_value=0),
         },
     )
 
