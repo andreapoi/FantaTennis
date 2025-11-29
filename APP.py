@@ -273,7 +273,7 @@ elif page == "👥 Squadre":
 
             players_list = st.multiselect(
                 "Giocatori in rosa (devono essere esattamente 10)",
-                options=list(st.session_state.players_df["Player"]),
+                options=list(st.session_state.players_df["Giocatore"]),
             )
 
             submitted = st.form_submit_button("💾 Crea / Aggiorna squadra")
@@ -281,8 +281,8 @@ elif page == "👥 Squadre":
         if submitted:
             # Calcolo costo rosa
             df = st.session_state.players_df
-            mask = df["Player"].isin(players_list)
-            total_cost = df.loc[mask, "Price"].sum()
+            mask = df["Giocatore"].isin(players_list)
+            total_cost = df.loc[mask, "Prezzo"].sum()
 
             if not team_name:
                 st.error("Inserisci un nome squadra.")
@@ -327,7 +327,7 @@ elif page == "👥 Squadre":
             df_players = st.session_state.players_df
             for team in st.session_state.teams:
                 mask = df_players["Player"].isin(team["players"])
-                total_cost = df_players.loc[mask, "Price"].sum()
+                total_cost = df_players.loc[mask, "Prezzo"].sum()
                 rows.append(
                     {
                         "Team": team["name"],
