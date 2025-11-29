@@ -326,7 +326,7 @@ elif page == "👥 Squadre":
             rows = []
             df_players = st.session_state.players_df
             for team in st.session_state.teams:
-                mask = df_players["Player"].isin(team["players"])
+                mask = df_players["Giocatore"].isin(team["players"])
                 total_cost = df_players.loc[mask, "Prezzo"].sum()
                 rows.append(
                     {
