@@ -224,7 +224,7 @@ elif page == "👤 Giocatori":
                 options=["XtremeTeam", "TheGang"],
                 required=False,
             ),
-            "Prezzo": st.column_config.NumberColumn("Price", min_value=0),
+            "Prezzo": st.column_config.NumberColumn("Prezzo", min_value=0),
         },
     )
 
