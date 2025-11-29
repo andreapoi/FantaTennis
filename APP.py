@@ -202,12 +202,12 @@ elif page == "👤 Giocatori":
     if uploaded is not None:
         try:
             df = pd.read_csv(uploaded)
-            expected_cols = ["Player", "Category", "Price"]
+            expected_cols = ["Giocatore", "Squadra", "Prezzo"]
             if all(col in df.columns for col in expected_cols):
                 st.session_state.players_df = df[expected_cols].copy()
                 st.success("Giocatori caricati correttamente.")
             else:
-                st.error("Il CSV deve contenere le colonne: Player, Category, Price")
+                st.error("Il CSV deve contenere le colonne: Giocatore, Squadra, Prezzo")
         except Exception as e:
             st.error(f"Errore nel caricamento: {e}")
 
@@ -218,10 +218,10 @@ elif page == "👤 Giocatori":
         use_container_width=True,
         key="players_editor",
         column_config={
-            "Player": st.column_config.TextColumn("Player"),
+            "Giocatore": st.column_config.TextColumn("Giocatore"),
             "Category": st.column_config.SelectboxColumn(
-                "Category",
-                options=["Top", "Mid", "Outsider", "Scommessa"],
+                "Squadra",
+                options=["XtremeTeam", "TheGang"],
                 required=False,
             ),
             "Price": st.column_config.NumberColumn("Price", min_value=0),
