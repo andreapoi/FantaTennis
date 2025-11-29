@@ -39,7 +39,7 @@ st.markdown(CUSTOM_CSS, unsafe_allow_html=True)
 # ------------------------------------------------------
 if "players_df" not in st.session_state:
     st.session_state.players_df = pd.DataFrame(
-        columns=["Player", "Category", "Price"]
+        columns=["Giocatore", "Squadra", "Prezzo"]
     )
 
 if "teams" not in st.session_state:
@@ -380,7 +380,7 @@ elif page == "🏆 Torneo & Punteggi":
         # Se non esiste ancora un df per il torneo, inizializziamo
         if st.session_state.tournament_df is None:
             base_df = st.session_state.players_df.copy()
-            base_df = base_df[["Player"]].copy()
+            base_df = base_df[["Giocatore"]].copy()
             base_df["Tournament Type"] = tournament_type
             base_df["Round Reached"] = "R32"
             base_df["Matches Won"] = 0
@@ -393,7 +393,7 @@ elif page == "🏆 Torneo & Punteggi":
             use_container_width=True,
             num_rows="fixed",
             column_config={
-                "Player": st.column_config.TextColumn("Player", disabled=True),
+                "Giocatore": st.column_config.TextColumn("Giocatore", disabled=True),
                 "Tournament Type": st.column_config.SelectboxColumn(
                     "Tournament Type",
                     options=ALL_TOURNAMENT_TYPES,
@@ -439,7 +439,7 @@ elif page == "🏆 Torneo & Punteggi":
                         reserves = team_players[6:8]  # non conteggiate
                         # ultimi 2 fuori lista
 
-                    mask_starters = df_sorted["Player"].isin(starters)
+                    mask_starters = df_sorted["Giocatore"].isin(starters)
                     team_points = df_sorted.loc[mask_starters, "Fantapoints"].sum()
 
                     rows.append(
