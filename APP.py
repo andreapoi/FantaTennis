@@ -201,7 +201,7 @@ elif page == "👤 Giocatori":
     uploaded = st.file_uploader("Carica file CSV", type=["csv"])
     if uploaded is not None:
         try:
-            df = pd.read_csv(uploaded)
+            df = pd.read_csv(uploaded, sep=';')
             expected_cols = ["Giocatore", "Squadra", "Prezzo"]
             if all(col in df.columns for col in expected_cols):
                 st.session_state.players_df = df[expected_cols].copy()
