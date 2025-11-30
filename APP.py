@@ -3,6 +3,114 @@
 import streamlit as st
 import pandas as pd
 
+import base64
+import io
+import json
+import requests
+
+# ----------------- CONFIG GITHUB -----------------
+GITHUB_TOKEN = st.secrets["github"]["token"]
+GITHUB_REPO = st.secrets["github"]["repo"]       # es. "andreapoi/FantaTennis"
+GITHUB_BRANCH = st.secrets["github"]["branch"]   # es. "main"
+
+GITHUB_API_BASE = f"https://api.github.com/repos/{GITHUB_REPO}/contents"
+
+PLAYERS_PATH = "data/players.csv"
+TEAMS_PATH = "data/teams.json"
+RESULTS_PATH = "data/results.csv"
+
+
+def _github_headers():
+    return {
+        "Authorization": f"token {GITHUB_TOKEN}",
+        "Accept": "application/vnd.github+json",
+    }
+
+
+def load_file_from_github(path: str):
+    """Ritorna (bytes, sha) del file su GitHub, oppure (None, None) se non esiste."""
+    url = f"{GITHUB_API_BASE}/{path}"
+    params = {"ref": GITHUB_BRANCH}
+    r = requests.get(url, headers=_github_headers(), params=params)
+    if r.status_code == 404:
+        return None, None
+    r.raise_for_status()
+    data = r.json()
+    content_bytes = base64.b64decode(data["content"])
+    sha = data["sha"]
+    return content_bytes, sha
+
+
+def save_file_to_github(path: str, content_bytes: bytes, message: str):
+    """Crea/aggiorna un file su GitHub con un commit."""
+    url = f"{GITHUB_API_BASE}/{path}"
+
+    # recupera sha se esiste già
+    _, sha = load_file_from_github(path)
+    b64_content = base64.b64encode(content_bytes).decode("utf-8")
+
+    payload = {
+        "message": message,
+        "content": b64_content,
+        "branch": GITHUB_BRANCH,
+    }
+    if sha:
+        payload["sha"] = sha
+
+    r = requests.put(url, headers=_github_headers(), json=payload)
+    r.raise_for_status()
+
+# -------- PLAYERS --------
+def load_players_df():
+    content, _ = load_file_from_github(PLAYERS_PATH)
+    if content is None:
+        return pd.DataFrame(columns=["Giocatore", "Squadra", "Prezzo"])
+    csv_str = content.decode("utf-8")
+    return pd.read_csv(io.StringIO(csv_str))
+
+
+def save_players_df(df: pd.DataFrame):
+    csv_bytes = df.to_csv(index=False).encode("utf-8")
+    save_file_to_github(PLAYERS_PATH, csv_bytes, "Update players.csv from app")
+
+
+# -------- TEAMS (lista di dict) --------
+def load_teams_list():
+    content, _ = load_file_from_github(TEAMS_PATH)
+    if content is None:
+        return []
+    json_str = content.decode("utf-8")
+    return json.loads(json_str)
+
+
+def save_teams_list(teams: list):
+    json_bytes = json.dumps(teams, ensure_ascii=False, indent=2).encode("utf-8")
+    save_file_to_github(TEAMS_PATH, json_bytes, "Update teams.json from app")
+
+
+# -------- RESULTS / STANDINGS --------
+def load_results_df():
+    content, _ = load_file_from_github(RESULTS_PATH)
+    if content is None:
+        return pd.DataFrame()
+    csv_str = content.decode("utf-8")
+    return pd.read_csv(io.StringIO(csv_str))
+
+
+def save_results_df(df: pd.DataFrame):
+    csv_bytes = df.to_csv(index=False).encode("utf-8")
+    save_file_to_github(RESULTS_PATH, csv_bytes, "Update results.csv from app")
+
+# -------- INIZIALIZZAZIONE SESSION_STATE DA GITHUB --------
+if "players_df" not in st.session_state:
+    st.session_state.players_df = load_players_df()
+
+if "teams" not in st.session_state:
+    st.session_state.teams = load_teams_list()
+
+if "results_df" not in st.session_state:
+    st.session_state.results_df = load_results_df()
+
 # ------------------------------------------------------
 # CONFIGURAZIONE APP
 # ------------------------------------------------------
@@ -340,6 +448,15 @@ elif page == "👥 Squadre":
                 )
             teams_df = pd.DataFrame(rows)
             st.dataframe(teams_df, use_container_width=True)
+
+if st.checkbox("Test connessione GitHub (admin)"):
+    try:
+        st.write("Players_df attuale:", st.session_state.players_df.head())
+        save_players_df(st.session_state.players_df)
+        st.success("Scrittura su GitHub OK ✅ (controlla il repo: data/players.csv)")
+    except Exception as e:
+        st.error(f"Errore GitHub API: {e}")
+
 
 # ------------------------------------------------------
 # PAGINA 4: TORNEO & PUNTEGGI
