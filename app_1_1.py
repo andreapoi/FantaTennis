@@ -295,12 +295,26 @@ if page == "👤 Giocatori":
     if uploaded is not None:
         try:
             df_new = pd.read_csv(uploaded)
+
+# 🔥 Normalizzazione nomi colonna (risolve il tuo problema)
+            df_new.columns = (
+                             df_new.columns
+                                   .str.strip()
+                                   .str.replace("\ufeff", "", regex=False)  # rimuove BOM UTF-8
+                             )
+
             expected_cols = {"Giocatore", "Squadra", "Prezzo"}
+
             if not expected_cols.issubset(df_new.columns):
-                st.error(f"Il CSV deve contenere almeno le colonne: {expected_cols}")
+                     st.error(
+                     f"Il CSV deve contenere almeno le colonne: {expected_cols}\n"
+                     f"Colonne trovate: {list(df_new.columns)}"
+                     )
             else:
-                st.session_state.players_df = df_new[list(expected_cols)]
-                st.success("Giocatori caricati correttamente dal CSV.")
+                     st.session_state.players_df = df_new[list(expected_cols)]
+                     st.success("Giocatori caricati correttamente dal CSV.")
+
+           
         except Exception as e:
             st.error(f"Errore nel leggere il CSV: {e}")
 
