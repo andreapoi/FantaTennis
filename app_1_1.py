@@ -290,33 +290,39 @@ if page == "👤 Giocatori":
     )
 
     # Upload CSV
-    st.subheader("Carica giocatori da CSV")
-    uploaded = st.file_uploader("Carica file CSV", type=["csv"])
-    if uploaded is not None:
-        try:
-            df_new = pd.read_csv(uploaded)
+st.subheader("Carica giocatori da CSV")
+uploaded = st.file_uploader("Carica file CSV", type=["csv"])
+if uploaded is not None:
+    try:
+        # 1️⃣ Primo tentativo: separatore di default (",")
+        df_new = pd.read_csv(uploaded)
 
-# 🔥 Normalizzazione nomi colonna (risolve il tuo problema)
-            df_new.columns = (
-                             df_new.columns
-                                   .str.strip()
-                                   .str.replace("\ufeff", "", regex=False)  # rimuove BOM UTF-8
-                             )
+        # 2️⃣ Se vedo una sola colonna con dentro i ";" → è un CSV con separatore ";"
+        if len(df_new.columns) == 1 and ";" in df_new.columns[0]:
+            uploaded.seek(0)  # riporta il puntatore all'inizio del file
+            df_new = pd.read_csv(uploaded, sep=";")
 
-            expected_cols = {"Giocatore", "Squadra", "Prezzo"}
+        # 3️⃣ Normalizzo i nomi delle colonne (spazi, BOM, ecc.)
+        df_new.columns = (
+            df_new.columns
+            .str.strip()
+            .str.replace("\ufeff", "", regex=False)  # rimuove BOM UTF-8
+        )
 
-            if not expected_cols.issubset(df_new.columns):
-                     st.error(
-                     f"Il CSV deve contenere almeno le colonne: {expected_cols}\n"
-                     f"Colonne trovate: {list(df_new.columns)}"
-                     )
-            else:
-                     st.session_state.players_df = df_new[list(expected_cols)]
-                     st.success("Giocatori caricati correttamente dal CSV.")
+        expected_cols = {"Giocatore", "Squadra", "Prezzo"}
 
-           
-        except Exception as e:
-            st.error(f"Errore nel leggere il CSV: {e}")
+        if not expected_cols.issubset(df_new.columns):
+            st.error(
+                f"Il CSV deve contenere almeno le colonne: {expected_cols} "
+                f"Colonne trovate: {list(df_new.columns)}"
+            )
+        else:
+            st.session_state.players_df = df_new[list(expected_cols)]
+            st.success("Giocatori caricati correttamente dal CSV.")
+
+    except Exception as e:
+        st.error(f"Errore nel leggere il CSV: {e}")
+
 
     st.markdown("---")
     st.subheader("Lista giocatori (modifica direttamente qui)")
