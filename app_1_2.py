@@ -396,129 +396,67 @@ if page == "🏠 Home & Regole":
 # ------------------------------------------------------
 # PAGINA 2: GIOCATORI
 # ------------------------------------------------------
+
 if page == "👤 Giocatori":
     st.title("👤 Gestione Giocatori Fantatennis")
 
     st.markdown(
         """
         Qui gestisci l'**anagrafica dei giocatori**: nome, categoria e prezzo.
-        Puoi:
-        - Aggiungere / modificare direttamente nella tabella
-        - Scaricare / caricare il CSV per riutilizzarlo
         """
     )
 
-    # Upload CSV
-    st.subheader("Carica giocatori da CSV")
-    uploaded = st.file_uploader("Carica file CSV", type=["csv"])
-    if uploaded is not None:
-        try:
-            # 1️⃣ Primo tentativo: separatore di default (",")
-            df_new = pd.read_csv(uploaded)
+    # Se players.csv è già popolato, NON è obbligatorio ricaricare nulla
+    if not st.session_state.players_df.empty:
+        st.info(
+            "Giocatori già caricati da GitHub (data/players.csv). "
+            "Puoi modificarli direttamente nella tabella sotto o scaricare il CSV."
+        )
+        show_upload_section = False
+    else:
+        st.warning(
+            "Nessun giocatore trovato su GitHub. "
+            "Carica un CSV con i giocatori oppure inseriscili manualmente."
+        )
+        show_upload_section = True
 
-            # 2️⃣ Se vedo una sola colonna con dentro i ";" → è un CSV con separatore ";"
-            if len(df_new.columns) == 1 and ";" in df_new.columns[0]:
-                uploaded.seek(0)  # riporta il puntatore all'inizio del file
-                df_new = pd.read_csv(uploaded, sep=";")
+    # 🔹 SEZIONE UPLOAD CSV (solo se vuoi/serve)
+    if show_upload_section:
+        st.subheader("Carica giocatori da CSV")
+        uploaded = st.file_uploader("Carica file CSV", type=["csv"])
+        if uploaded is not None:
+            try:
+                # 1️⃣ Primo tentativo: separatore di default (",")
+                df_new = pd.read_csv(uploaded)
 
-            # 🔥 Normalizzazione nomi colonna (risolve problemi BOM/spazi)
-            df_new.columns = (
-                df_new.columns
-                .str.strip()
-                .str.replace("\ufeff", "", regex=False)  # rimuove BOM UTF-8
-            )
+                # 2️⃣ Se vedo una sola colonna con dentro i ";" → separatore ";"
+                if len(df_new.columns) == 1 and ";" in df_new.columns[0]:
+                    uploaded.seek(0)
+                    df_new = pd.read_csv(uploaded, sep=";")
 
-            expected_cols = {"Giocatore", "Squadra", "Prezzo"}
-
-            if not expected_cols.issubset(df_new.columns):
-                st.error(
-                    f"Il CSV deve contenere almeno le colonne: {expected_cols} "
-                    f"Colonne trovate: {list(df_new.columns)}"
+                # Normalizzazione nomi colonna
+                df_new.columns = (
+                    df_new.columns
+                    .str.strip()
+                    .str.replace("\ufeff", "", regex=False)
                 )
-            else:
-                st.session_state.players_df = df_new[list(expected_cols)]
-                st.success("Giocatori caricati correttamente dal CSV.")
 
-        except Exception as e:
-            st.error(f"Errore nel leggere il CSV: {e}")
+                expected_cols = {"Giocatore", "Squadra", "Prezzo"}
 
-    # ----------------- Ranking & Moltiplicatori -----------------
-    st.markdown("---")
-    st.subheader("Ranking & moltiplicatori bonus/malus")
+                if not expected_cols.issubset(df_new.columns):
+                    st.error(
+                        f"Il CSV deve contenere almeno le colonne: {expected_cols} "
+                        f"Colonne trovate: {list(df_new.columns)}"
+                    )
+                else:
+                    st.session_state.players_df = df_new[list(expected_cols)]
+                    st.success("Giocatori caricati correttamente dal CSV.")
 
-    st.markdown(
-        """
-        Carica un CSV con colonne:
+            except Exception as e:
+                st.error(f"Errore nel leggere il CSV: {e}")
 
-        - **ranking**
-        - **player**
-        - **moltiplicatore bonus**
-        - **moltiplicatore malus**
-
-        Verrà salvato su GitHub e usato per tutta la stagione.
-        """
-    )
-
-    uploaded_mul = st.file_uploader(
-        "Carica CSV ranking/multiplicatori",
-        type=["csv"],
-        key="multipliers_uploader",
-    )
-
-    if uploaded_mul is not None:
-        try:
-            df_mul = pd.read_csv(uploaded_mul)
-            # Gestione CSV con separatore ";"
-            if len(df_mul.columns) == 1 and ";" in df_mul.columns[0]:
-                uploaded_mul.seek(0)
-                df_mul = pd.read_csv(uploaded_mul, sep=";")
-
-            df_mul.columns = (
-                df_mul.columns
-                .str.strip()
-                .str.lower()
-                .str.replace("\ufeff", "", regex=False)
-            )
-
-            required = {
-                "ranking",
-                "player",
-                "moltiplicatore bonus",
-                "moltiplicatore malus",
-            }
-            if not required.issubset(df_mul.columns):
-                st.error(
-                    f"Il CSV deve contenere almeno le colonne: {required}. "
-                    f"Colonne trovate: {list(df_mul.columns)}"
-                )
-            else:
-                df_mul = df_mul[
-                    ["ranking", "player", "moltiplicatore bonus", "moltiplicatore malus"]
-                ]
-                st.session_state.multipliers_df = df_mul
-                st.success("Tabella ranking/multiplicatori caricata correttamente.")
-        except Exception as e:
-            st.error(f"Errore nel leggere il CSV dei multipliers: {e}")
-
-    if st.session_state.multipliers_df is not None and not st.session_state.multipliers_df.empty:
-        st.write("Tabella multipliers attuale:")
-        st.dataframe(st.session_state.multipliers_df, use_container_width=True)
-
-        col_m1, col_m2 = st.columns(2)
-        with col_m1:
-            st.download_button(
-                "⬇️ Scarica ranking/multiplicatori",
-                data=st.session_state.multipliers_df.to_csv(index=False).encode("utf-8"),
-                file_name="ranking_multipliers.csv",
-                mime="text/csv",
-            )
-        with col_m2:
-            if st.button("💾 Salva ranking/multiplicatori su GitHub"):
-                try:
-                    save_multipliers_df(st.session_state.multipliers_df)
-                    st.success("Salvato su GitHub (data/ranking_multipliers.csv).")
-                except Exception as e:
-                    st.error(f"Errore nel salvataggio multipliers su GitHub: {e}")
+    # 🔹 Ranking & multipliers (come già messo)
+    # ... (lascia invariata tutta la parte multipliers) ...
 
     st.markdown("---")
     st.subheader("Lista giocatori (modifica direttamente qui)")
@@ -529,29 +467,11 @@ if page == "👤 Giocatori":
         key="players_editor",
         column_config={
             "Giocatore": st.column_config.TextColumn("Giocatore"),
-            "Squadra": st.column_config.SelectboxColumn(
-                "Squadra",
-                options=[
-                    "XtremeTeam",
-                    "TheGang",
-                    "Milan",
-                    "Inter",
-                    "Juve",
-                    "Roma",
-                    "Napoli",
-                    "Lazio",
-                    "Atalanta",
-                    "Bologna",
-                    "Fiorentina",
-                    "Lecce",
-                ],
-                required=False,
-            ),
+            "Squadra": st.column_config.TextColumn("Squadra"),
             "Prezzo": st.column_config.NumberColumn("Prezzo", min_value=0),
         },
     )
 
-    # Aggiorna lo stato
     st.session_state.players_df = edited_df
 
     st.download_button(
@@ -560,6 +480,7 @@ if page == "👤 Giocatori":
         file_name="fantatennis_players.csv",
         mime="text/csv",
     )
+
 
 # ------------------------------------------------------
 # PAGINA 3: SQUADRE
