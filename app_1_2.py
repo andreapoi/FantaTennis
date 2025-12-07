@@ -1106,14 +1106,14 @@ if page == "📈 Stagione & Classifica":
                st.info("Nessun torneo disponibile nei risultati.")
            else:
               colt1, colt2 = st.columns(2)
-                with colt1:
+              with colt1:
                      sel_season = st.selectbox(
                      "Season torneo",
                      options=sorted(tournaments["Season"].unique()),
                      key="sel_t_season",
                      )
-                sub = tournaments[tournaments["Season"] == sel_season]
-                with colt2:
+              sub = tournaments[tournaments["Season"] == sel_season]
+              with colt2:
                      options_tn = sub["Tournament"] + " (" + sub["Tournament Type"] + ")"
                      label_to_row = dict(zip(options_tn, sub.to_dict("records")))
                      sel_label = st.selectbox(
@@ -1121,23 +1121,23 @@ if page == "📈 Stagione & Classifica":
                                  options=list(label_to_row.keys()),
                                  key="sel_t_label",
                                  )
-                t_row = label_to_row[sel_label]
-                t_name = t_row["Tournament"]
-                t_type = t_row["Tournament Type"]
+              t_row = label_to_row[sel_label]
+              t_name = t_row["Tournament"]
+              t_type = t_row["Tournament Type"]
 
-                mask_t = (
+              mask_t = (
                          (df_res["Season"] == sel_season)
                          & (df_res["Tournament"] == t_name)
                          & (df_res["Tournament Type"] == t_type)
                          )
-                df_tournament = df_res[mask_t].copy()
+              df_tournament = df_res[mask_t].copy()
 
-                st.write(f"Match registrati per **{t_name} {sel_season} ({t_type})**:")
-                st.dataframe(df_tournament, use_container_width=True)
+              st.write(f"Match registrati per **{t_name} {sel_season} ({t_type})**:")
+              st.dataframe(df_tournament, use_container_width=True)
 
                 # download CSV torneo
-                csv_t = df_tournament.to_csv(index=False).encode("utf-8")
-                st.download_button(
+              csv_t = df_tournament.to_csv(index=False).encode("utf-8")
+              st.download_button(
                                    "⬇️ Scarica CSV di questo torneo",
                                    data=csv_t,
                                    file_name=f"{sel_season}_{t_name.replace(' ','_')}_{t_type}.csv",
@@ -1146,16 +1146,16 @@ if page == "📈 Stagione & Classifica":
                                    )
 
                 # editor per cancellare righe
-                st.markdown("Puoi modificare/cancellare righe di questo torneo qui sotto:")
+              st.markdown("Puoi modificare/cancellare righe di questo torneo qui sotto:")
 
-                edited_tournament = st.data_editor(
+              edited_tournament = st.data_editor(
                                     df_tournament,
                                     num_rows="dynamic",
                                     use_container_width=True,
                                     key="edit_tournament_df",
                                     )
 
-                if st.button("💾 Applica modifiche di questo torneo al dataset stagione"):
+              if st.button("💾 Applica modifiche di questo torneo al dataset stagione"):
                    # rimpiazziamo SOLO le righe di questo torneo con la versione editata
                    base = df_res.copy()
                    mask_keep = ~mask_t
