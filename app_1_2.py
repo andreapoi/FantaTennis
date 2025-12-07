@@ -609,16 +609,25 @@ if page == "🏆 Torneo & Punteggi":
         )
 
         st.subheader("Impostazioni Torneo")
-        col1, col2 = st.columns(2)
+        col1, col2, col3 = st.columns(3)
         with col1:
-            tournament_name = st.text_input("Nome torneo", value="Torneo Fantatennis")
+             tournament_name = st.text_input("Nome torneo", value="Torneo Fantatennis")
         with col2:
-            default_type = "Slam"
-            tournament_type = st.selectbox(
-                "Tipo torneo",
-                options=ALL_TOURNAMENT_TYPES,
-                index=ALL_TOURNAMENT_TYPES.index(default_type),
-            )
+             default_type = "Slam"
+             tournament_type = st.selectbox(
+              "Tipo torneo",
+              options=ALL_TOURNAMENT_TYPES,
+              index=ALL_TOURNAMENT_TYPES.index(default_type),
+              )
+        with col3:
+             season = st.number_input("Season", min_value=2000, max_value=2100, value=2025, step=1)
+
+        add_to_season = st.checkbox(
+             "Aggiungi questi risultati al dataset stagionale",
+              value=False,
+              help="Se spuntato, alla fine del calcolo questi match verranno aggiunti a results_df (pagina Stagione & Classifica).",
+              )
+
 
         st.markdown("### Risultati per giocatore")
 
