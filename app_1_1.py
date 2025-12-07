@@ -335,7 +335,7 @@ if uploaded is not None:
             "Giocatore": st.column_config.TextColumn("Giocatore"),
             "Squadra": st.column_config.SelectboxColumn(
                 "Squadra",
-                options=["XtremeTeam", "TheGang","Milan"],
+                options=["XtremeTeam", "TheGang","Milan","inter","fiorentina","juve","lazio","lecce","napoli","bolo","atalanta","roma"],
                 required=False,
             ),
             "Prezzo": st.column_config.NumberColumn("Prezzo", min_value=0),
