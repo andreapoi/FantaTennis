@@ -854,7 +854,7 @@ if page == "📈 Stagione & Classifica":
     )
 
     if uploaded_results is not None:
-    try:
+     try:
         df_upload = pd.read_csv(uploaded_results)
         # Gestione CSV con separatore ";"
         if len(df_upload.columns) == 1 and ";" in df_upload.columns[0]:
@@ -894,7 +894,7 @@ if page == "📈 Stagione & Classifica":
                             ignore_index=True,
                         )
                     st.success("Risultati stagione AGGIUNTI (append) con il file caricato.")
-    except Exception as e:
+     except Exception as e:
         st.error(f"Errore nella lettura del CSV: {e}")
 
     st.markdown("---")
