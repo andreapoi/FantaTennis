@@ -633,16 +633,18 @@ if page == "🏆 Torneo & Punteggi":
 
         # Se non esiste ancora un df per il torneo, inizializziamo
         if st.session_state.tournament_df is None:
-            base_df = st.session_state.players_df.copy()
-            base_df = base_df[["Giocatore"]].copy()
-            base_df["Tournament Type"] = tournament_type
-            base_df["Round Reached"] = "R32"
-            base_df["Matches Won"] = 0
-            base_df["Matches Lost"] = 0
-            # colonne boolean per bonus/malus speciali
-            for col in MATCH_BOOL_COLUMNS:
-                base_df[col] = 0
-            st.session_state.tournament_df = base_df
+           base_df = st.session_state.players_df.copy()
+           base_df = base_df[["Giocatore"]].copy()
+           base_df["Season"] = season
+           base_df["Tournament"] = tournament_name
+           base_df["Tournament Type"] = tournament_type
+           base_df["Round Reached"] = "R128"
+           base_df["Matches Won"] = 0
+           base_df["Matches Lost"] = 0
+           for col in MATCH_BOOL_COLUMNS:
+              base_df[col] = 0
+           st.session_state.tournament_df = base_df
+
 
         edited_tournament_df = st.data_editor(
             st.session_state.tournament_df,
@@ -685,6 +687,9 @@ if page == "🏆 Torneo & Punteggi":
             key="tournament_editor",
         )
 
+        edited_tournament_df["Season"] = season
+        edited_tournament_df["Tournament"] = tournament_name
+        edited_tournament_df["Tournament Type"] = tournament_type
         st.session_state.tournament_df = edited_tournament_df
 
         if st.button("📊 Calcola punteggi torneo"):
@@ -758,6 +763,41 @@ if page == "🏆 Torneo & Punteggi":
                     "Nessuna squadra definita: vai nella sezione **Squadre** per creare le leghe."
                 )
 
+                        # 👇 APPEND FACOLTATIVO AI RISULTATI STAGIONALI
+            if add_to_season:
+                # garantiamo che esistano tutte le colonne richieste dalla pagina Stagione
+                required_cols_season = [
+                    "Season",
+                    "Tournament",
+                    "Tournament Type",
+                    "Giocatore",
+                    "Round Reached",
+                    "Matches Won",
+                    "Matches Lost",
+                ] + MATCH_BOOL_COLUMNS
+
+                df_append = df.copy()
+                for col in required_cols_season:
+                    if col not in df_append.columns:
+                        df_append[col] = 0
+
+                # manteniamo solo le colonne necessarie + eventualmente altre
+                df_append = df_append[required_cols_season]
+
+                if st.session_state.results_df is None or st.session_state.results_df.empty:
+                    st.session_state.results_df = df_append
+                else:
+                    st.session_state.results_df = pd.concat(
+                        [st.session_state.results_df, df_append],
+                        ignore_index=True,
+                    )
+
+                st.success(
+                    "Risultati di questo torneo aggiunti al dataset stagionale "
+                    "(puoi vederli/modificarli nella pagina 'Stagione & Classifica')."
+                )
+
+            
             # Download risultati
             csv_players = df_sorted.to_csv(index=False).encode("utf-8")
             st.download_button(
@@ -814,27 +854,48 @@ if page == "📈 Stagione & Classifica":
     )
 
     if uploaded_results is not None:
-        try:
-            df_upload = pd.read_csv(uploaded_results)
-            # Gestione CSV con separatore ";"
-            if len(df_upload.columns) == 1 and ";" in df_upload.columns[0]:
-                uploaded_results.seek(0)
-                df_upload = pd.read_csv(uploaded_results, sep=";")
+    try:
+        df_upload = pd.read_csv(uploaded_results)
+        # Gestione CSV con separatore ";"
+        if len(df_upload.columns) == 1 and ";" in df_upload.columns[0]:
+            uploaded_results.seek(0)
+            df_upload = pd.read_csv(uploaded_results, sep=";")
 
-            missing = [c for c in REQUIRED_COLUMNS if c not in df_upload.columns]
-            if missing:
-                st.error(f"Mancano colonne obbligatorie nel file caricato: {missing}")
-            else:
-                # aggiungiamo eventuali colonne flag mancanti, inizializzate a 0
-                for col in MATCH_BOOL_COLUMNS:
-                    if col not in df_upload.columns:
-                        df_upload[col] = 0
-                st.info(f"File caricato con {len(df_upload)} righe.")
-                if st.button("Usa questo file come risultati stagione (sostituisci tutto)"):
+        missing = [c for c in REQUIRED_COLUMNS if c not in df_upload.columns]
+        if missing:
+            st.error(f"Mancano colonne obbligatorie nel file caricato: {missing}")
+        else:
+            # aggiungiamo eventuali colonne flag mancanti, inizializzate a 0
+            for col in MATCH_BOOL_COLUMNS:
+                if col not in df_upload.columns:
+                    df_upload[col] = 0
+
+            st.info(f"File caricato con {len(df_upload)} righe.")
+
+            mode = st.radio(
+                "Come usare questo file:",
+                (
+                    "Sostituisci risultati esistenti",
+                    "Aggiungi (append) ai risultati esistenti",
+                ),
+                key="results_upload_mode",
+            )
+
+            if st.button("Applica file risultati"):
+                if mode == "Sostituisci risultati esistenti":
                     st.session_state.results_df = df_upload
-                    st.success("Risultati stagione aggiornati dalla sorgente CSV.")
-        except Exception as e:
-            st.error(f"Errore nella lettura del CSV: {e}")
+                    st.success("Risultati stagione SOSTITUITI con il file caricato.")
+                else:
+                    if st.session_state.results_df is None or st.session_state.results_df.empty:
+                        st.session_state.results_df = df_upload
+                    else:
+                        st.session_state.results_df = pd.concat(
+                            [st.session_state.results_df, df_upload],
+                            ignore_index=True,
+                        )
+                    st.success("Risultati stagione AGGIUNTI (append) con il file caricato.")
+    except Exception as e:
+        st.error(f"Errore nella lettura del CSV: {e}")
 
     st.markdown("---")
     st.markdown("### 2️⃣ Modifica / inserisci risultati manualmente")
