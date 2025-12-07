@@ -844,28 +844,76 @@ if page == "📈 Stagione & Classifica":
         "Matches Lost",    # 1 se persa, 0 se vinta
     ]
 
-    st.markdown("### 1️⃣ Carica risultati da CSV (opzionale)")
+    import re  # in cima al file se non c'è già
+
+# ...
+
+    st.markdown("### 1️⃣ Carica risultati da CSV (giorno per giorno)")
+
+    colm1, colm2, colm3 = st.columns(3)
+    with colm1:
+        upload_season = st.number_input(
+             "Season (per questo upload)",
+             min_value=2000,
+             max_value=2100,
+             value=2025,
+             step=1,
+             key="upload_season"
+             ) 
+    with colm2:
+        upload_tournament = st.text_input(
+             "Nome torneo (per questo upload)",
+             value="Australian Open",
+             key="upload_tournament"
+             )
+    with colm3:
+        upload_type = st.selectbox(
+             "Tipo torneo (per questo upload)",
+             options=ALL_TOURNAMENT_TYPES,
+             index=0,
+             key="upload_t_type"
+             )
+
 
     uploaded_results = st.file_uploader(
-        "Carica file CSV con i risultati di stagione",
-        type=["csv"],
-        key="results_uploader",
-        help="Il file deve contenere almeno le colonne: " + ", ".join(REQUIRED_COLUMNS),
+    "Carica file CSV con i risultati di una o più partite (solo giocatori che hanno giocato)",
+    type=["csv"],
+    key="results_uploader",
+    help=(
+        "Il file può contenere solo i giocatori che hanno giocato quel giorno. "
+        "Se mancano Season/Tournament/Tournament Type, userò i valori qui sopra."
+    ),
     )
 
     if uploaded_results is not None:
-     try:
+      try:
         df_upload = pd.read_csv(uploaded_results)
         # Gestione CSV con separatore ";"
         if len(df_upload.columns) == 1 and ";" in df_upload.columns[0]:
             uploaded_results.seek(0)
             df_upload = pd.read_csv(uploaded_results, sep=";")
 
+        # Normalizza nomi colonna per sicurezza
+        df_upload.columns = (
+            df_upload.columns
+            .str.strip()
+            .str.replace("\ufeff", "", regex=False)
+        )
+
+        # Se mancano alcune colonne chiave, le imposto dai widget sopra
+        if "Season" not in df_upload.columns:
+            df_upload["Season"] = upload_season
+        if "Tournament" not in df_upload.columns:
+            df_upload["Tournament"] = upload_tournament
+        if "Tournament Type" not in df_upload.columns:
+            df_upload["Tournament Type"] = upload_type
+
+        # Verifica colonne minime
         missing = [c for c in REQUIRED_COLUMNS if c not in df_upload.columns]
         if missing:
-            st.error(f"Mancano colonne obbligatorie nel file caricato: {missing}")
+            st.error(f"Mancano colonne obbligatorie nel file caricato o nei campi sopra: {missing}")
         else:
-            # aggiungiamo eventuali colonne flag mancanti, inizializzate a 0
+            # Aggiungiamo eventuali colonne flag mancanti, inizializzate a 0
             for col in MATCH_BOOL_COLUMNS:
                 if col not in df_upload.columns:
                     df_upload[col] = 0
@@ -875,27 +923,56 @@ if page == "📈 Stagione & Classifica":
             mode = st.radio(
                 "Come usare questo file:",
                 (
-                    "Sostituisci risultati esistenti",
                     "Aggiungi (append) ai risultati esistenti",
+                    "Sostituisci solo i risultati di questo torneo",
                 ),
                 key="results_upload_mode",
             )
 
-            if st.button("Applica file risultati"):
-                if mode == "Sostituisci risultati esistenti":
+            if st.button("Applica file risultati (giornata)"):
+                # Normalizziamo chiavi torneo usate per filtro
+                df_upload["Tournament Type"] = df_upload["Tournament Type"].astype(str).str.strip().str.title()
+                t_season = df_upload["Season"].iloc[0]
+                t_name = df_upload["Tournament"].iloc[0]
+                t_type = df_upload["Tournament Type"].iloc[0]
+
+                if (
+                    st.session_state.results_df is None
+                    or st.session_state.results_df.empty
+                ):
                     st.session_state.results_df = df_upload
-                    st.success("Risultati stagione SOSTITUITI con il file caricato.")
                 else:
-                    if st.session_state.results_df is None or st.session_state.results_df.empty:
-                        st.session_state.results_df = df_upload
-                    else:
+                    base = st.session_state.results_df.copy()
+                    base["Tournament Type"] = base["Tournament Type"].astype(str).str.strip().str.title()
+
+                    if mode == "Sostituisci solo i risultati di questo torneo":
+                        # togliamo tutte le righe di *quel* torneo+season+tipo
+                        mask = ~(
+                            (base["Season"] == t_season)
+                            & (base["Tournament"] == t_name)
+                            & (base["Tournament Type"] == t_type)
+                        )
+                        base = base[mask]
                         st.session_state.results_df = pd.concat(
-                            [st.session_state.results_df, df_upload],
+                            [base, df_upload],
                             ignore_index=True,
                         )
-                    st.success("Risultati stagione AGGIUNTI (append) con il file caricato.")
-     except Exception as e:
+                        st.success(
+                            f"Risultati per {t_name} {t_season} ({t_type}) SOSTITUITI con quelli del file."
+                        )
+                    else:
+                        # semplice append: punteggio ricorsivo giorno dopo giorno
+                        st.session_state.results_df = pd.concat(
+                            [base, df_upload],
+                            ignore_index=True,
+                        )
+                        st.success(
+                            f"Risultati per {t_name} {t_season} ({t_type}) AGGIUNTI (append)."
+                        )
+
+      except Exception as e:
         st.error(f"Errore nella lettura del CSV: {e}")
+
 
     st.markdown("---")
     st.markdown("### 2️⃣ Modifica / inserisci risultati manualmente")
