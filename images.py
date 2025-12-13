@@ -6,10 +6,10 @@ from pathlib import Path
 st.set_page_config(page_title="FantaTennis • Players Gallery", layout="wide")
 
 # ===== CONFIG =====
-IMG_DIR = Path("FantaTennis/images")
+IMG_DIR = Path("images")
 PLACEHOLDER = IMG_DIR / "placeholder.png"
 
-DEFAULT_CSV = Path("FantaTennis/data/md_players.csv")  # cambia in Path("players.csv") se lo hai in root
+DEFAULT_CSV = Path("data/md_players.csv")  # cambia in Path("players.csv") se lo hai in root
 ID_COL = "id_player"
 NAME_COL = "full_name"  # se non ce l'hai, userà player_id
 
