@@ -1,101 +1,101 @@
-ranking,player,moltiplicatore bonus,moltiplicatore malus
-1,Carlos Alcaraz,1.0,1.9
-2,Jannik Sinner,1.0,1.9
-3,Alexander Zverev,1.0,1.9
-4,Novak Djokoviƒá,1.0,1.9
-5,F√©lix Auger-Aliassime,1.0,1.9
-6,Taylor Fritz,1.0,1.9
-7,Alex de Minaur,1.0,1.9
-8,Lorenzo Musetti,1.0,1.9
-9,Ben Shelton,1.0,1.9
-10,Jack Draper,1.0,1.9
-11,Alexander Bublik,1.1,1.8
-12,Casper Ruud,1.1,1.8
-13,Daniil Medvedev,1.1,1.8
-14,Alejandro Davidovich Fokina,1.1,1.8
-15,Holger Rune,1.1,1.8
-16,Andrey Rublev,1.1,1.8
-17,Ji≈ô√≠ Leheƒçka,1.1,1.8
-18,Karen Khachanov,1.1,1.8
-19,Jakub Men≈°√≠k,1.1,1.8
-20,Tommy Paul,1.1,1.8
-21,Francisco Cer√∫ndolo,1.2,1.7
-22,Flavio Cobolli,1.2,1.7
-23,Denis Shapovalov,1.2,1.7
-24,Jo√£o Fonseca,1.2,1.7
-25,Tallon Griekspoor,1.2,1.7
-26,Luciano Darderi,1.2,1.7
-27,Cameron Norrie,1.2,1.7
-28,Learner Tien,1.2,1.7
-29,Arthur Rinderknech,1.2,1.7
-30,Frances Tiafoe,1.2,1.7
-31,Valentin Vacherot,1.3,1.6
-32,Tom√°≈° Mach√°ƒç,1.3,1.6
-33,Brandon Nakashima,1.3,1.6
-34,Stefanos Tsitsipas,1.3,1.6
-35,Corentin Moutet,1.3,1.6
-36,Jaume Munar,1.3,1.6
-37,Ugo Humbert,1.3,1.6
-38,Alex Michelsen,1.3,1.6
-39,Lorenzo Sonego,1.3,1.6
-40,Arthur Fils,1.3,1.6
-41,Gabriel Diallo,1.4,1.5
-42,Alexandre M√ºller,1.4,1.5
-43,Zizou Bergs,1.4,1.5
-44,Grigor Dimitrov,1.4,1.5
-45,Sebasti√°n B√°ez,1.4,1.5
-46,Daniel Altmaier,1.4,1.5
-47,Nuno Borges,1.4,1.5
-48,Sebastian Korda,1.4,1.5
-49,Camilo Ugo Carabelli,1.4,1.5
-50,Reilly Opelka,1.4,1.5
-51,F√°bi√°n Marozs√°n,1.5,1.4
-52,Miomir Kecmanoviƒá,1.5,1.4
-53,Jenson Brooksby,1.5,1.4
-54,Alexei Popyrin,1.5,1.4
-55,M√°rton Fucsovics,1.5,1.4
-56,Matteo Berrettini,1.5,1.4
-57,Valentin Royer,1.5,1.4
-58,Giovanni Mpetshi Perricard,1.5,1.4
-59,Tom√°s Mart√≠n Etcheverry,1.5,1.4
-60,Aleksandar Kovaƒçeviƒá,1.5,1.4
-61,Matteo Arnaldi,1.6,1.3
-62,Kamil Majchrzak,1.6,1.3
-63,T√©rence Atmane,1.6,1.3
-64,Marcos Giron,1.6,1.3
-65,Damir D≈æumhur,1.6,1.3
-66,Arthur Cazaux,1.6,1.3
-67,Francisco Comesa√±a,1.6,1.3
-68,Ga√´l Monfils,1.6,1.3
-69,Adrian Mannarino,1.6,1.3
-70,Ethan Quinn,1.6,1.3
-71,Jacob Fearnley,1.7,1.2
-72,Mariano Navone,1.7,1.2
-73,Hubert Hurkacz,1.7,1.2
-74,Mattia Bellucci,1.7,1.2
-75,Marin ƒåiliƒá,1.7,1.2
-76,Jesper de Jong,1.7,1.2
-77,Botic van de Zandschulp,1.7,1.2
-78,Adam Walton,1.7,1.2
-79,Filip Misolic,1.7,1.2
-80,Cristian Gar√≠n,1.7,1.2
-81,Alejandro Tabilo,1.8,1.1
-82,Aleksandar Vukic,1.8,1.1
-83,Hamad Medjedoviƒá,1.8,1.1
-84,Jan Lennard Struff,1.8,1.1
-85,Juan Manuel Cer√∫ndolo,1.8,1.1
-86,James Duckworth,1.8,1.1
-87,Rapha√´l Collignon,1.8,1.1
-88,Emilio Nava,1.8,1.1
-89,Pablo Carre√±o Busta,1.8,1.1
-90,Eliot Spizzirri,1.8,1.1
-91,Quentin Halys,1.9,1.0
-92,Roberto Bautista Agut,1.9,1.0
-93,Pedro Mart√≠nez,1.9,1.0
-94,Benjamin Bonzi,1.9,1.0
-95,Alexander Shevchenko,1.9,1.0
-96,Dalibor Svrƒçina,1.9,1.0
-97,Hugo Gaston,1.9,1.0
-98,Laslo Djere,1.9,1.0
-99,Tristan Schoolkate,1.9,1.0
-100,Shintaro Mochizuki,1.9,1.0
+ranking	Giocatore	moltiplicatore bonus	moltiplicatore malus	id_player	Squadra	Prezzo
+1	Carlos Alcaraz	1	1.9	0001	Milan	70
+2	Jannik Sinner	1	1.9	0002	Lazio	70
+3	Alexander Zverev	1	1.9	0003	Juve	70
+4	Novak Djokovi_	1	1.9	0004	Toro	70
+5	Félix Auger-Aliassime	1	1.9	0005	Inter	70
+6	Taylor Fritz	1	1.9	0006	Roma	70
+7	Alex de Minaur	1	1.9	0007	Bologna	70
+8	Lorenzo Musetti	1	1.9	0008	Cagliari	70
+9	Ben Shelton	1	1.9	0009	Lecce	70
+10	Jack Draper	1	1.9	0010	Como	70
+11	Alexander Bublik	1.1	1.8	0011	Milan	60
+12	Casper Ruud	1.1	1.8	0012	Lazio	60
+13	Daniil Medvedev	1.1	1.8	0013	Juve	60
+14	Alejandro Davidovich Fokina	1.1	1.8	0014	Toro	60
+15	Holger Rune	1.1	1.8	0015	Inter	60
+16	Andrey Rublev	1.1	1.8	0016	Roma	60
+17	Ji_í Lehe_ka	1.1	1.8	0017	Bologna	60
+18	Karen Khachanov	1.1	1.8	0018	Cagliari	60
+19	Jakub Men_ík	1.1	1.8	0019	Lecce	60
+20	Tommy Paul	1.1	1.8	0020	Como	60
+21	Francisco Cerúndolo	1.2	1.7	0021	Milan	50
+22	Flavio Cobolli	1.2	1.7	0022	Lazio	50
+23	Denis Shapovalov	1.2	1.7	0023	Juve	50
+24	João Fonseca	1.2	1.7	0024	Toro	50
+25	Tallon Griekspoor	1.2	1.7	0025	Inter	50
+26	Luciano Darderi	1.2	1.7	0026	Roma	50
+27	Cameron Norrie	1.2	1.7	0027	Bologna	50
+28	Learner Tien	1.2	1.7	0028	Cagliari	50
+29	Arthur Rinderknech	1.2	1.7	0029	Lecce	50
+30	Frances Tiafoe	1.2	1.7	0030	Como	50
+31	Valentin Vacherot	1.3	1.6	0031	Milan	40
+32	Tomá_ Machá_	1.3	1.6	0032	Lazio	40
+33	Brandon Nakashima	1.3	1.6	0033	Juve	40
+34	Stefanos Tsitsipas	1.3	1.6	0034	Toro	40
+35	Corentin Moutet	1.3	1.6	0035	Inter	40
+36	Jaume Munar	1.3	1.6	0036	Roma	40
+37	Ugo Humbert	1.3	1.6	0037	Bologna	40
+38	Alex Michelsen	1.3	1.6	0038	Cagliari	40
+39	Lorenzo Sonego	1.3	1.6	0039	Lecce	40
+40	Arthur Fils	1.3	1.6	0040	Como	40
+41	Gabriel Diallo	1.4	1.5	0041	Milan	30
+42	Alexandre Müller	1.4	1.5	0042	Lazio	30
+43	Zizou Bergs	1.4	1.5	0043	Juve	30
+44	Grigor Dimitrov	1.4	1.5	0044	Toro	30
+45	Sebastián Báez	1.4	1.5	0045	Inter	30
+46	Daniel Altmaier	1.4	1.5	0046	Roma	30
+47	Nuno Borges	1.4	1.5	0047	Bologna	30
+48	Sebastian Korda	1.4	1.5	0048	Cagliari	30
+49	Camilo Ugo Carabelli	1.4	1.5	0049	Lecce	30
+50	Reilly Opelka	1.4	1.5	0050	Como	30
+51	Fábián Marozsán	1.5	1.4	0051	Milan	20
+52	Miomir Kecmanovi_	1.5	1.4	0052	Lazio	20
+53	Jenson Brooksby	1.5	1.4	0053	Juve	20
+54	Alexei Popyrin	1.5	1.4	0054	Toro	20
+55	Márton Fucsovics	1.5	1.4	0055	Inter	20
+56	Matteo Berrettini	1.5	1.4	0056	Roma	20
+57	Valentin Royer	1.5	1.4	0057	Bologna	20
+58	Giovanni Mpetshi Perricard	1.5	1.4	0058	Cagliari	20
+59	Tomás Martín Etcheverry	1.5	1.4	0059	Lecce	20
+60	Aleksandar Kova_evi_	1.5	1.4	0060	Como	20
+61	Matteo Arnaldi	1.6	1.3	0061	Milan	10
+62	Kamil Majchrzak	1.6	1.3	0062	Lazio	10
+63	Térence Atmane	1.6	1.3	0063	Juve	10
+64	Marcos Giron	1.6	1.3	0064	Toro	10
+65	Damir D_umhur	1.6	1.3	0065	Inter	10
+66	Arthur Cazaux	1.6	1.3	0066	Roma	10
+67	Francisco Comesaña	1.6	1.3	0067	Bologna	10
+68	Gaël Monfils	1.6	1.3	0068	Cagliari	10
+69	Adrian Mannarino	1.6	1.3	0069	Lecce	10
+70	Ethan Quinn	1.6	1.3	0070	Como	10
+71	Jacob Fearnley	1.7	1.2	0071	Milan	5
+72	Mariano Navone	1.7	1.2	0072	Lazio	5
+73	Hubert Hurkacz	1.7	1.2	0073	Juve	5
+74	Mattia Bellucci	1.7	1.2	0074	Toro	5
+75	Marin _ili_	1.7	1.2	0075	Inter	5
+76	Jesper de Jong	1.7	1.2	0076	Roma	5
+77	Botic van de Zandschulp	1.7	1.2	0077	Bologna	5
+78	Adam Walton	1.7	1.2	0078	Cagliari	5
+79	Filip Misolic	1.7	1.2	0079	Lecce	5
+80	Cristian Garín	1.7	1.2	0080	Como	5
+81	Alejandro Tabilo	1.8	1.1	0081	Milan	4
+82	Aleksandar Vukic	1.8	1.1	0082	Lazio	4
+83	Hamad Medjedovi_	1.8	1.1	0083	Juve	4
+84	Jan Lennard Struff	1.8	1.1	0084	Toro	4
+85	Juan Manuel Cerúndolo	1.8	1.1	0085	Inter	4
+86	James Duckworth	1.8	1.1	0086	Roma	4
+87	Raphaël Collignon	1.8	1.1	0087	Bologna	4
+88	Emilio Nava	1.8	1.1	0088	Cagliari	4
+89	Pablo Carreño Busta	1.8	1.1	0089	Lecce	4
+90	Eliot Spizzirri	1.8	1.1	0090	Como	4
+91	Quentin Halys	1.9	1	0091	Milan	3
+92	Roberto Bautista Agut	1.9	1	0092	Lazio	3
+93	Pedro Martínez	1.9	1	0093	Juve	3
+94	Benjamin Bonzi	1.9	1	0094	Toro	3
+95	Alexander Shevchenko	1.9	1	0095	Inter	3
+96	Dalibor Svr_ina	1.9	1	0096	Roma	3
+97	Hugo Gaston	1.9	1	0097	Bologna	3
+98	Laslo Djere	1.9	1	0098	Cagliari	3
+99	Tristan Schoolkate	1.9	1	0099	Lecce	3
+100	Shintaro Mochizuki	1.9	1	0100	Como	3
