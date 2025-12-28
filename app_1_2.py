@@ -1058,6 +1058,12 @@ if page == "📈 Stagione & Classifica":
                             [base, df_upload],
                             ignore_index=True,
                         )
+                        # DEDUP: evita duplicati se ricarichi lo stesso match/player
+                        if "match_id" in st.session_state.results_df.columns:
+                            st.session_state.results_df = st.session_state.results_df.drop_duplicates(
+                            subset=["Season", "Tournament", "Tournament Type", "match_id", "Giocatore"],
+                            keep="last"
+                            )
                         st.success(
                             f"Risultati per {t_name} {t_season} ({t_type}) SOSTITUITI con quelli del file."
                         )
@@ -1067,6 +1073,12 @@ if page == "📈 Stagione & Classifica":
                             [base, df_upload],
                             ignore_index=True,
                         )
+                        # DEDUP: evita duplicati se ricarichi lo stesso match/player
+                        if "match_id" in st.session_state.results_df.columns:
+                            st.session_state.results_df = st.session_state.results_df.drop_duplicates(
+                            subset=["Season", "Tournament", "Tournament Type", "match_id", "Giocatore"],
+                            keep="last"
+                            )
                         st.success(
                             f"Risultati per {t_name} {t_season} ({t_type}) AGGIUNTI (append)."
                         )
