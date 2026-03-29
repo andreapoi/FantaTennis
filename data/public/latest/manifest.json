@@ -1,11 +1,13 @@
 {
-  "version": "20260329_195157",
-  "updated_at": "2026-03-29T19:51:57.706304",
+  "version": "20260329_211927",
+  "updated_at": "2026-03-29T21:19:27.153890+00:00",
   "files": {
-    "team_rosters.csv": 92,
-    "player_points.csv": 12,
+    "manifest.json": null,
     "md_players.csv": 2236,
-    "team_points.csv": 7,
-    "standings.csv": 7
+    "nothing": null,
+    "player_points.csv": 24,
+    "standings.csv": 10,
+    "team_points.csv": 10,
+    "team_rosters.csv": 92
   }
 }
