@@ -1,0 +1,13 @@
+{
+  "version": "20260329_211927",
+  "updated_at": "2026-03-29T21:19:27.153890+00:00",
+  "files": {
+    "manifest.json": null,
+    "md_players.csv": 2236,
+    "nothing": null,
+    "player_points.csv": 24,
+    "standings.csv": 10,
+    "team_points.csv": 10,
+    "team_rosters.csv": 92
+  }
+}
