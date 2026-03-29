@@ -1,0 +1,11 @@
+{
+  "version": "20260329_201904",
+  "updated_at": "2026-03-29T20:19:04.350288",
+  "files": {
+    "team_rosters.csv": 92,
+    "player_points.csv": 24,
+    "md_players.csv": 2236,
+    "team_points.csv": 10,
+    "standings.csv": 10
+  }
+}
